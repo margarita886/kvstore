@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sstream>
 #include<string>
+#include<fstream>
 #include <map>
 using namespace std;
 
@@ -9,7 +10,16 @@ int main(){
 map<string, string> data;
 string line;
 
+ifstream inFile("data.txt");
+string fileLine;
 
+while(getline(inFile, fileLine)){
+    stringstream fs(fileLine);
+    string k, v;
+    getline(fs, k, ',');
+    getline(fs, v, ',');
+    data[k] = v;
+}
 
 bool ex = false;
 
@@ -29,11 +39,11 @@ while(ex==false){
     }
     else if(com=="GET"){
         auto it = data.find(key);
-        if(it == data.end()){ //key doesnt exist
-            cout<<"KEY NOT FOUND. USE 'SET' to set a new key";
+        if(it == data.end()){
+            cout<<"KEY NOT FOUND. USE 'SET' to set a new key"<<endl;
         } 
     else{
-        cout<<it->second; // using the location of it find the value(2nd)
+        cout<<it->second<<endl;
     }
 
     }
@@ -47,6 +57,12 @@ while(ex==false){
 
 
 }
+
+ofstream outFile("data.txt");
+for(pair<string,string> entry : data){
+    outFile<<entry.first<<","<<entry.second<<endl;
+}
+outFile.close();
 
 return 0;    
 }
